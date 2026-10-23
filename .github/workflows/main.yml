@@ -1,27 +1,28 @@
-name: Test PowerShell Workflow
+name: Test du script Python ADB
 
-# Déclencheurs : sur push et manuellement
 on:
   push:
     branches: [ "main" ]
-  workflow_dispatch: # Permet de lancer le workflow manuellement depuis l'onglet Actions
+  workflow_dispatch: # Permet de le lancer manuellement
 
 jobs:
-  test-pwsh:
-    name: Exécuter un script PowerShell
-    runs-on: windows-latest # ou ubuntu-latest
+  test-python:
+    name: Vérifier le code Python
+    runs-on: ubuntu-latest # Utilise Linux, c'est plus rapide et gratuit
 
     steps:
-      # 1. Récupérer le code du dépôt
-      - name: Checkout du code
+      - name: Récupérer le code
         uses: actions/checkout@v4
 
-      # 2. Exécuter une commande PowerShell simple
-      - name: Afficher un message
-        shell: pwsh
-        run: Write-Output "Hello depuis PowerShell !"
+      - name: Installer Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
 
-      # 3. Exécuter un script PowerShell présent dans ton dépôt
-      - name: Lancer mon script
-        shell: pwsh
-        run: ./mon_script.ps1
+      - name: Installer les dépendances (Rich)
+        run: |
+          python -m pip install --upgrade pip
+          pip install rich
+
+      - name: Vérifier la syntaxe de adb_toolkit.py
+        run: python -m py_compile adb_toolkit.py

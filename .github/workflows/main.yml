@@ -1,0 +1,27 @@
+name: Test PowerShell Workflow
+
+# Déclencheurs : sur push et manuellement
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch: # Permet de lancer le workflow manuellement depuis l'onglet Actions
+
+jobs:
+  test-pwsh:
+    name: Exécuter un script PowerShell
+    runs-on: windows-latest # ou ubuntu-latest
+
+    steps:
+      # 1. Récupérer le code du dépôt
+      - name: Checkout du code
+        uses: actions/checkout@v4
+
+      # 2. Exécuter une commande PowerShell simple
+      - name: Afficher un message
+        shell: pwsh
+        run: Write-Output "Hello depuis PowerShell !"
+
+      # 3. Exécuter un script PowerShell présent dans ton dépôt
+      - name: Lancer mon script
+        shell: pwsh
+        run: ./mon_script.ps1
